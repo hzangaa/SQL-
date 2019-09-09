@@ -1,0 +1,1068 @@
+mysql> create database selectTest;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| rest               |
+| selectTest         |
+| sys                |
+| test               |
++--------------------+
+7 rows in set (0.00 sec)
+
+mysql> use selectTest
+Database changed
+
+--学生表
+--STUDENT
+--学号
+--姓名
+--性别
+--出生年月日
+--所在班级
+  create table student(
+	sno varchar(20) primary key,
+	sname varchar(20) not null,
+	ssex varchar(10) not null,
+	sbirthday datetime,
+	class varchar(20)
+);
+
+mysql> create table student(
+    -> sno varchar(20) primary key,
+    -> sname varchar(20) not null,
+    -> ssex varchar(10) not null,
+    -> sbirthday datetime,
+    -> class varchar(20)
+    -> );
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> show tables;
++----------------------+
+| Tables_in_selecttest |
++----------------------+
+| student              |
++----------------------+
+1 row in set (0.01 sec)
+
+
+--教师表
+--Teacher
+--教师编号
+--教师名字
+--教师性别
+--出生年月日
+--职称
+--所在部门
+create table teacher(
+	tno varchar(20) primary key,
+	tname varchar(20) not null,
+	tsex varchar(10) not null,
+	tbirthday datetime,
+	prof varchar(20) not null,
+	depart varchar(20) not null
+);
+
+mysql> create table teacher(
+    -> tno varchar(20) primary key,
+    -> tname varchar(20) not null,
+    -> tsex varchar(10) not null,
+    -> tbirthday datetime,
+    -> prof varchar(20) not null,
+    -> depart varchar(20) not null
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+
+--课程表
+--course
+--课程号
+--课程名称
+--教师编号
+create table course(
+	cno varchar(20) primary key,
+	cname varchar(20) not null,
+	tno varchar(20) not null,
+	foreign key(tno) references teacher(tno)
+);
+mysql> create table course(
+    -> cno varchar(20) primary key,
+    -> cname varchar(20) not null,
+    -> tno varchar(20) not null,
+    -> foreign key(tno) references teacher(tno)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+
+ --成绩表
+ --Score
+ --学号
+ --课程号
+ --成绩
+ create table score(
+ 	sno varchar(20) not null,
+ 	cno varchar(20) not null,
+ 	degree decimal,
+ 	foreign key(sno) references student(sno),
+ 	foreign key(cno) references course(cno),
+ 	primary key(sno,cno)
+ );
+
+mysql>  create table score(
+    ->  sno varchar(20) primary key,
+    ->  cno varchar(20) not null,
+    ->  degree decimal,
+    ->  foreign key(sno) references student(sno),
+    ->  foreign key(cno) references course(cno)
+    ->  );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show tables;
++----------------------+
+| Tables_in_selecttest |
++----------------------+
+| course               |
+| score                |
+| student              |
+| teacher              |
++----------------------+
+4 rows in set (0.00 sec)
+
+mysql> descibe courese;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'descibe courese' at line 1
+mysql> describe course;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| cno   | varchar(20) | NO   | PRI | NULL    |       |
+| cname | varchar(20) | NO   |     | NULL    |       |
+| tno   | varchar(20) | NO   | MUL | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> describe score;
++--------+---------------+------+-----+---------+-------+
+| Field  | Type          | Null | Key | Default | Extra |
++--------+---------------+------+-----+---------+-------+
+| sno    | varchar(20)   | NO   | PRI | NULL    |       |
+| cno    | varchar(20)   | NO   | MUL | NULL    |       |
+| degree | decimal(10,0) | YES  |     | NULL    |       |
++--------+---------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> describe student;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| sno       | varchar(20) | NO   | PRI | NULL    |       |
+| sname     | varchar(20) | NO   |     | NULL    |       |
+| ssex      | varchar(10) | NO   |     | NULL    |       |
+| sbirthday | datetime    | YES  |     | NULL    |       |
+| class     | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> describe teacher;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| tno       | varchar(20) | NO   | PRI | NULL    |       |
+| tname     | varchar(20) | NO   |     | NULL    |       |
+| tsex      | varchar(10) | NO   |     | NULL    |       |
+| tbirthday | datetime    | YES  |     | NULL    |       |
+| prof      | varchar(20) | NO   |     | NULL    |       |
+| depart    | varchar(20) | NO   |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+--数值为空，填充数值
+insert into student values('101','曾华','男','1977-09-01','95033');
+insert into student values('102','匡明','男','1975-10-02','95031');
+insert into student values('103','王丽','女','1976-01-23','95033');
+insert into student values('104','李军','男','1976-02-20','95033');
+insert into student values('105','王芳','女','1975-02-10','95031');
+insert into student values('106','陆君','男','1974-06-03','95031');
+insert into student values('107','季军','男','1976-02-20','95033');
+insert into student values('108','王尼玛','男','1976-02-20','95033');
+insert into student values('109','张全蛋','男','1975-02-10','95031');
+
+mysql> select * from student;
++-----+-----------+------+---------------------+-------+
+| sno | sname     | ssex | sbirthday           | class |
++-----+-----------+------+---------------------+-------+
+| 101 | 曾华      | 男   | 1977-09-01 00:00:00 | 95033 |
+| 102 | 匡明      | 男   | 1975-10-02 00:00:00 | 95031 |
+| 103 | 王丽      | 女   | 1976-01-23 00:00:00 | 95033 |
+| 104 | 李军      | 男   | 1976-02-20 00:00:00 | 95033 |
+| 105 | 王芳      | 女   | 1975-02-10 00:00:00 | 95031 |
+| 106 | 陆君      | 男   | 1974-06-03 00:00:00 | 95031 |
+| 107 | 季军      | 男   | 1976-02-20 00:00:00 | 95033 |
+| 108 | 王尼玛    | 男   | 1976-02-20 00:00:00 | 95033 |
+| 109 | 张全蛋    | 男   | 1975-02-10 00:00:00 | 95031 |
++-----+-----------+------+---------------------+-------+
+9 rows in set (0.00 sec)
+
+insert into teacher values('804','李诚','男','1958-12-02','副教授','计算机系');
+insert into teacher values('856','张旭','男','1969-03-12','讲师','电子工程系');
+insert into teacher values('825','王萍','女','1972-05-05','助教','计算机系');
+insert into teacher values('831','刘冰','女','1977-08-14','助教','电子工程系系');
++-----+--------+------+---------------------+-----------+--------------------+
+| tno | tname  | tsex | tbirthday           | prof      | depart             |
++-----+--------+------+---------------------+-----------+--------------------+
+| 804 | 李诚   | 男   | 1958-12-02 00:00:00 | 副教授    | 计算机系           |
+| 825 | 王萍   | 女   | 1972-05-05 00:00:00 | 助教      | 计算机系           |
+| 831 | 刘冰   | 女   | 1977-08-14 00:00:00 | 助教      | 电子工程系系       |
+| 856 | 张旭   | 男   | 1969-03-12 00:00:00 | 讲师      | 电子工程系         |
++-----+--------+------+---------------------+-----------+--------------------+
+4 rows in set (0.00 sec)
+
+insert into course values('3-105','计算机导论','825');
+insert into course values('3-245','操作系统','804');
+insert into course values('6-166','数字电路','856');
+insert into course values('9-888','高等数学','831');
+
+mysql> select * from course;
++-------+-----------------+-----+
+| cno   | cname           | tno |
++-------+-----------------+-----+
+| 3-105 | 计算机导论      | 825 |
+| 3-245 | 操作系统        | 804 |
+| 6-166 | 数字电路        | 856 |
+| 9-888 | 高等数学        | 831 |
++-------+-----------------+-----+
+4 rows in set (0.00 sec)
+
+insert into score values('103','3-105','86');
+insert into score values('105','3-245','75');
+insert into score values('105','3-105','88');
+insert into score values('109','3-105','76');
+insert into score values('103','6-166','85');
+insert into score values('105','6-166','79');
+insert into score values('109','6-166','81');
+insert into score values('109','3-245','81');
+
+mysql> select * from score;
++-----+-------+--------+
+| sno | cno   | degree |
++-----+-------+--------+
+| 103 | 3-105 |     92 |
+| 103 | 6-166 |     85 |
+| 105 | 3-105 |     88 |
+| 105 | 3-245 |     75 |
+| 105 | 6-166 |     79 |
+| 109 | 3-105 |     76 |
+| 109 | 3-245 |     68 |
+| 109 | 6-166 |     81 |
++-----+-------+--------+
+8 rows in set (0.00 sec)
+
+--查询练习：
+--1.检查student表中所有记录：
+select * from student;
+mysql> select * from student;
++-----+-----------+------+---------------------+-------+
+| sno | sname     | ssex | sbirthday           | class |
++-----+-----------+------+---------------------+-------+
+| 101 | 曾华      | 男   | 1977-09-01 00:00:00 | 95033 |
+| 102 | 匡明      | 男   | 1975-10-02 00:00:00 | 95031 |
+| 103 | 王丽      | 女   | 1976-01-23 00:00:00 | 95033 |
+| 104 | 李军      | 男   | 1976-02-20 00:00:00 | 95033 |
+| 105 | 王芳      | 女   | 1975-02-10 00:00:00 | 95031 |
+| 106 | 陆君      | 男   | 1974-06-03 00:00:00 | 95031 |
+| 107 | 季军      | 男   | 1976-02-20 00:00:00 | 95033 |
+| 108 | 王尼玛    | 男   | 1976-02-20 00:00:00 | 95033 |
+| 109 | 张全蛋    | 男   | 1975-02-10 00:00:00 | 95031 |
++-----+-----------+------+---------------------+-------+
+9 rows in set (0.01 sec)
+
+--2.查询student表中的所有记录的sname、ssex和class列
+select sname,ssex,class from student;
+mysql> select sname,ssex,class from student;
++-----------+------+-------+
+| sname     | ssex | class |
++-----------+------+-------+
+| 曾华      | 男   | 95033 |
+| 匡明      | 男   | 95031 |
+| 王丽      | 女   | 95033 |
+| 李军      | 男   | 95033 |
+| 王芳      | 女   | 95031 |
+| 陆君      | 男   | 95031 |
+| 季军      | 男   | 95033 |
+| 王尼玛    | 男   | 95033 |
+| 张全蛋    | 男   | 95031 |
++-----------+------+-------+
+9 rows in set (0.00 sec)
+
+--3.查询教师所有的单位即不重复的depart列。
+select distinct depart from teacher;
+
+mysql> select distinct depart from teacher;
++--------------------+
+| depart             |
++--------------------+
+| 计算机系           |
+| 电子工程系系       |
+| 电子工程系         |
++--------------------+
+3 rows in set (0.00 sec)
+
+--4.查询score表中成绩在60到80之间的所有记录。
+select * from score where degree between 60 and 80;
+mysql> select * from score where degree between 60 and 80;
++-----+-------+--------+
+| sno | cno   | degree |
++-----+-------+--------+
+| 105 | 3-245 |     75 |
+| 105 | 6-166 |     79 |
+| 109 | 3-105 |     76 |
+| 109 | 3-245 |     68 |
++-----+-------+--------+
+4 rows in set (0.00 sec)
+
+select * from score where degree >60 and degree<80;
+
+--5.查询score 表中成绩为85,86或88的记录。
+select * from score where degree in (85,86,88);
+mysql> select * from score where degree in (85,86,88);
++-----+-------+--------+
+| sno | cno   | degree |
++-----+-------+--------+
+| 103 | 6-166 |     85 |
+| 105 | 3-105 |     88 |
++-----+-------+--------+
+2 rows in set (0.01 sec)
+
+--6.查询student表中“95031”班或性别为“女”的同学记录。
+select * from student where sno='95031' or ssex='女'; 
+mysql> select * from student where sno='95031' or ssex='女'; 
++-----+--------+------+---------------------+-------+
+| sno | sname  | ssex | sbirthday           | class |
++-----+--------+------+---------------------+-------+
+| 103 | 王丽   | 女   | 1976-01-23 00:00:00 | 95033 |
+| 105 | 王芳   | 女   | 1975-02-10 00:00:00 | 95031 |
++-----+--------+------+---------------------+-------+
+2 rows in set (0.00 sec)
+
+--7.以class降序查询student表的所有记录。
+select * from student
+order by class desc;
+mysql> select * from student
+    -> order by class desc;
++-----+-----------+------+---------------------+-------+
+| sno | sname     | ssex | sbirthday           | class |
++-----+-----------+------+---------------------+-------+
+| 101 | 曾华      | 男   | 1977-09-01 00:00:00 | 95033 |
+| 103 | 王丽      | 女   | 1976-01-23 00:00:00 | 95033 |
+| 104 | 李军      | 男   | 1976-02-20 00:00:00 | 95033 |
+| 107 | 季军      | 男   | 1976-02-20 00:00:00 | 95033 |
+| 108 | 王尼玛    | 男   | 1976-02-20 00:00:00 | 95033 |
+| 102 | 匡明      | 男   | 1975-10-02 00:00:00 | 95031 |
+| 105 | 王芳      | 女   | 1975-02-10 00:00:00 | 95031 |
+| 106 | 陆君      | 男   | 1974-06-03 00:00:00 | 95031 |
+| 109 | 张全蛋    | 男   | 1975-02-10 00:00:00 | 95031 |
++-----+-----------+------+---------------------+-------+
+
+--8.以cno升序、degree降序查询score表的所有记录。
+select * from score
+order by cno asc,degree desc;
+mysql> select * from score
+    -> order by cno asc,degree desc;
++-----+-------+--------+
+| sno | cno   | degree |
++-----+-------+--------+
+| 103 | 3-105 |     92 |
+| 105 | 3-105 |     88 |
+| 109 | 3-105 |     76 |
+| 105 | 3-245 |     75 |
+| 109 | 3-245 |     68 |
+| 103 | 6-166 |     85 |
+| 109 | 6-166 |     81 |
+| 105 | 6-166 |     79 |
++-----+-------+--------+
+8 rows in set (0.00 sec)
+
+--9.查询"95031"班的人数。
+select count(*) from student  where class='95031';
+mysql> select count(*) from student  where class='95031';
++----------+
+| count(*) |
++----------+
+|        4 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select * from student where class='95031';
++-----+-----------+------+---------------------+-------+
+| sno | sname     | ssex | sbirthday           | class |
++-----+-----------+------+---------------------+-------+
+| 102 | 匡明      | 男   | 1975-10-02 00:00:00 | 95031 |
+| 105 | 王芳      | 女   | 1975-02-10 00:00:00 | 95031 |
+| 106 | 陆君      | 男   | 1974-06-03 00:00:00 | 95031 |
+| 109 | 张全蛋    | 男   | 1975-02-10 00:00:00 | 95031 |
++-----+-----------+------+---------------------+-------+
+4 rows in set (0.00 sec)
+
+--10.查询score表中的最高分的学生学号和课程号。
+select sno,cno from score where degree=(select max(degree) from score);
+mysql> select sno,cno from score where degree=(select max(degree) from score);
++-----+-------+
+| sno | cno   |
++-----+-------+
+| 103 | 3-105 |
++-----+-------+
+1 row in set (0.00 sec)
+
+select sno,cno from score order by degree desc limit 0,1;
+--limit a,b; 从a开始，显示b个数
+
+--11.查询每门课程的平均成绩；
+select avg(degree) from score 
+group by cno;
+mysql> select avg(degree) from score 
+    -> group by cno;
++-------------+
+| avg(degree) |
++-------------+
+|     85.3333 |
+|     71.5000 |
+|     81.6667 |
++-------------+
+3 rows in set (0.01 sec)
+
+
+--12.查询score表中至少有2名学生选修的并以3开头的平均分数
+select cno,avg(degree) from score 
+group by cno
+having count(cno)>=2 and cno like '3%';
+mysql> select cno,avg(degree) from score group by cno
+    -> having count(cno)>=2 and cno like '3%';
++-------+-------------+
+| cno   | avg(degree) |
++-------+-------------+
+| 3-105 |     85.3333 |
+| 3-245 |     71.5000 |
++-------+-------------+
+2 rows in set (0.07 sec)
+
+
+--13.查询分数大于70，小于90的sno列
+select sno,degree from score 
+where degree>70 and degree<90;
+mysql> select sno,degree from score 
+    -> where degree>70 and degree<90;
++-----+--------+
+| sno | degree |
++-----+--------+
+| 103 |     85 |
+| 105 |     88 |
+| 105 |     75 |
+| 105 |     79 |
+| 109 |     76 |
+| 109 |     81 |
++-----+--------+
+6 rows in set (0.01 sec)
+
+--14.查询所有学生的sname,cno 和 degree 列。
+select sname,cno,degree from student,score 
+where student.sno=score.sno;
+mysql> select sname,cno,degree from student,score 
+    -> where student.sno=score.sno;
++-----------+-------+--------+
+| sname     | cno   | degree |
++-----------+-------+--------+
+| 王丽      | 3-105 |     92 |
+| 王丽      | 6-166 |     85 |
+| 王芳      | 3-105 |     88 |
+| 王芳      | 3-245 |     75 |
+| 王芳      | 6-166 |     79 |
+| 张全蛋    | 3-105 |     76 |
+| 张全蛋    | 3-245 |     68 |
+| 张全蛋    | 6-166 |     81 |
++-----------+-------+--------+
+8 rows in set (0.01 sec)
+
+--15.查询所有学生的sno,cname 和 degree 列。
+select sno,cname,degree from score,course
+where score.cno=course.cno;
+mysql> select sno,cname,degree from score,course
+    -> where score.cno=course.cno;
++-----+-----------------+--------+
+| sno | cname           | degree |
++-----+-----------------+--------+
+| 103 | 计算机导论      |     92 |
+| 105 | 计算机导论      |     88 |
+| 109 | 计算机导论      |     76 |
+| 105 | 操作系统        |     75 |
+| 109 | 操作系统        |     68 |
+| 103 | 数字电路        |     85 |
+| 105 | 数字电路        |     79 |
+| 109 | 数字电路        |     81 |
++-----+-----------------+--------+
+8 rows in set (0.00 sec)
+
+--16.查询所有学生的sname、cname 和 degree 列。
+select sname,cname,degree 
+from student,score,course
+where score.cno=course.cno and score.sno=student.sno;
+
+mysql> select sname,cname,degree 
+    -> from student,score,course
+    -> where score.cno=course.cno and score.sno=student.sno;
++-----------+-----------------+--------+
+| sname     | cname           | degree |
++-----------+-----------------+--------+
+| 王丽      | 计算机导论      |     92 |
+| 王丽      | 数字电路        |     85 |
+| 王芳      | 计算机导论      |     88 |
+| 王芳      | 操作系统        |     75 |
+| 王芳      | 数字电路        |     79 |
+| 张全蛋    | 计算机导论      |     76 |
+| 张全蛋    | 操作系统        |     68 |
+| 张全蛋    | 数字电路        |     81 |
++-----------+-----------------+--------+
+8 rows in set (0.01 sec)
+
+--17.查询“95031”班学生每门课的平均分。
+
+select cno,avg(degree) 
+from score,student
+where student.class='95031' and student.sno=score.sno
+group by cno;
+
+mysql> select cno,avg(degree) 
+    -> from score,student
+    -> where student.class='95031' and student.sno=score.sno
+    -> group by cno;
++-------+-------------+
+| cno   | avg(degree) |
++-------+-------------+
+| 3-105 |     82.0000 |
+| 3-245 |     71.5000 |
+| 6-166 |     80.0000 |
++-------+-------------+
+3 rows in set (0.02 sec)
+
+select cno,avg(degree) 
+from score
+where sno in (select sno from student where class='95031')
+group by cno;
+
+mysql> select cno,avg(degree) 
+    -> from score
+    -> where sno in (select sno from student where class='95031')
+    -> group by cno;
++-------+-------------+
+| cno   | avg(degree) |
++-------+-------------+
+| 3-105 |     82.0000 |
+| 3-245 |     71.5000 |
+| 6-166 |     80.0000 |
++-------+-------------+
+3 rows in set (0.00 sec)
+
+
+--18.查询选择‘3-105’课程的成绩高于‘109’号同学‘3-105’成绩的所有同学的记录；
+
+select * from score  
+where cno='3-105' and degree>(select degree from score where cno='3-105' and sno='109');
+mysql> select * from score  
+    -> where cno='3-105' and degree>(select degree from score where cno='3-105' and sno='109');
++-----+-------+--------+
+| sno | cno   | degree |
++-----+-------+--------+
+| 103 | 3-105 |     92 |
+| 105 | 3-105 |     88 |
++-----+-------+--------+
+2 rows in set (0.01 sec)
+
+--19.查询成绩高于学号‘109’、课程号为‘3-105’的成绩的所有记录；
+
+mysql> select * from student,course,score 
+    -> where student.sno=score.sno and course.cno=score.cno and degree>(select degree from score where cno='3-105' and sno='109');
++-----+-----------+------+---------------------+-------+-------+-----------------+-----+-----+-------+--------+
+| sno | sname     | ssex | sbirthday           | class | cno   | cname           | tno | sno | cno   | degree |
++-----+-----------+------+---------------------+-------+-------+-----------------+-----+-----+-------+--------+
+| 103 | 王丽      | 女   | 1976-01-23 00:00:00 | 95033 | 3-105 | 计算机导论      | 825 | 103 | 3-105 |     92 |
+| 103 | 王丽      | 女   | 1976-01-23 00:00:00 | 95033 | 6-166 | 数字电路        | 856 | 103 | 6-166 |     85 |
+| 105 | 王芳      | 女   | 1975-02-10 00:00:00 | 95031 | 3-105 | 计算机导论      | 825 | 105 | 3-105 |     88 |
+| 105 | 王芳      | 女   | 1975-02-10 00:00:00 | 95031 | 6-166 | 数字电路        | 856 | 105 | 6-166 |     79 |
+| 109 | 张全蛋    | 男   | 1975-02-10 00:00:00 | 95031 | 6-166 | 数字电路        | 856 | 109 | 6-166 |     81 |
++-----+-----------+------+---------------------+-------+-------+-----------------+-----+-----+-------+--------+
+5 rows in set (0.01 sec)
+
+--20.查询和学号为108、101的同学同年出生的所有学生的sno,sname和sbirthday列。
+select sno,sname,sbirthday from student where year(sbirthday) in (select year(sbirthday) from student where sno in ('108','101'));
+mysql> select sno,sname,sbirthday from student where year(sbirthday) in (select year(sbirthday) from student where sno in ('108','101'));
++-----+-----------+---------------------+
+| sno | sname     | sbirthday           |
++-----+-----------+---------------------+
+| 101 | 曾华      | 1977-09-01 00:00:00 |
+| 103 | 王丽      | 1976-01-23 00:00:00 |
+| 104 | 李军      | 1976-02-20 00:00:00 |
+| 107 | 季军      | 1976-02-20 00:00:00 |
+| 108 | 王尼玛    | 1976-02-20 00:00:00 |
++-----+-----------+---------------------+
+5 rows in set (0.02 sec)
+
+--21.查询“张旭”教师任课的学生成绩；
+select sno,degree from teacher,course,score 
+where teacher.tno=course.tno and course.cno=score.cno and teacher.tname='张旭';
+mysql> select sno,degree from teacher,course,score 
+    -> where teacher.tno=course.tno and course.cno=score.cno and teacher.tname='张旭';
++-----+--------+
+| sno | degree |
++-----+--------+
+| 103 |     85 |
+| 105 |     79 |
+| 109 |     81 |
++-----+--------+
+3 rows in set (0.00 sec)
+
+--22.查询选修某课程的同学人数多于2人的教师姓名。
+select tname from teacher where 
+tno in (select tno from course where cno in (select cno from score group by cno having count(*)>2));
+
+mysql> select tname from teacher where 
+    -> tno in (select tno from course where cno in (select cno from score group by cno having count(*)>2));
++--------+
+| tname  |
++--------+
+| 王萍   |
+| 张旭   |
++--------+
+2 rows in set (0.00 sec)
+
+--23.查询95033班和95031班全体学生的记录。
+select * from student where class in (95033,95031);
+mysql> select * from student where class in (95033,95031);
++-----+-----------+------+---------------------+-------+
+| sno | sname     | ssex | sbirthday           | class |
++-----+-----------+------+---------------------+-------+
+| 101 | 曾华      | 男   | 1977-09-01 00:00:00 | 95033 |
+| 102 | 匡明      | 男   | 1975-10-02 00:00:00 | 95031 |
+| 103 | 王丽      | 女   | 1976-01-23 00:00:00 | 95033 |
+| 104 | 李军      | 男   | 1976-02-20 00:00:00 | 95033 |
+| 105 | 王芳      | 女   | 1975-02-10 00:00:00 | 95031 |
+| 106 | 陆君      | 男   | 1974-06-03 00:00:00 | 95031 |
+| 107 | 季军      | 男   | 1976-02-20 00:00:00 | 95033 |
+| 108 | 王尼玛    | 男   | 1976-02-20 00:00:00 | 95033 |
+| 109 | 张全蛋    | 男   | 1975-02-10 00:00:00 | 95031 |
++-----+-----------+------+---------------------+-------+
+9 rows in set (0.00 sec)
+
+--24.查询存在有85以上成绩的课程cno。
+select cno,degree from score where degree>85;
+mysql> select cno,degree from score where degree>85;
++-------+--------+
+| cno   | degree |
++-------+--------+
+| 3-105 |     92 |
+| 3-105 |     88 |
++-------+--------+
+2 rows in set (0.00 sec)
+
+--25.查询出“计算机系”教师所教课程的成绩表。
+select sno,cno,degree from score where cno in (select cno from course where tno in (select tno from teacher where depart='计算机系'));
+mysql> select sno,cno,degree from score where cno in (select cno from course where tno in (select tno from teacher where depart='计算机系'));
++-----+-------+--------+
+| sno | cno   | degree |
++-----+-------+--------+
+| 105 | 3-245 |     75 |
+| 109 | 3-245 |     68 |
+| 103 | 3-105 |     92 |
+| 105 | 3-105 |     88 |
+| 109 | 3-105 |     76 |
++-----+-------+--------+
+5 rows in set (0.01 sec)
+
+--26.查询“计算机系”与电子工程系“不同职称的教师的tname和prof。
+mysql> select * from teacher where depart='计算机系' and prof not in (select prof from teacher where depart='电子工程系')
+    -> union
+    -> select * from teacher where depart='电子工程系' and prof not in (select prof from teacher where depart='计算机系');
++-----+--------+------+---------------------+-----------+-----------------+
+| tno | tname  | tsex | tbirthday           | prof      | depart          |
++-----+--------+------+---------------------+-----------+-----------------+
+| 804 | 李诚   | 男   | 1958-12-02 00:00:00 | 副教授    | 计算机系        |
+| 825 | 王萍   | 女   | 1972-05-05 00:00:00 | 助教      | 计算机系        |
+| 856 | 张旭   | 男   | 1969-03-12 00:00:00 | 讲师      | 电子工程系      |
++-----+--------+------+---------------------+-----------+-----------------+
+3 rows in set (0.00 sec)
+
+--27.查询选修编号为‘3-105’课程且成绩至少高于选修编号为‘3-245’的同学的cno、sno和degree,并按degree从高到低排序。
+select * from score 
+where cno='3-105' 
+and degree > any(select degree from score where cno='3-245')
+order by degree desc;
+ 
+ mysql> select * from score 
+    -> where cno='3-105' 
+    -> and degree > any(select degree from score where cno='3-245')
+    -> order by degree desc;
++-----+-------+--------+
+| sno | cno   | degree |
++-----+-------+--------+
+| 103 | 3-105 |     92 |
+| 105 | 3-105 |     88 |
+| 109 | 3-105 |     76 |
++-----+-------+--------+
+3 rows in set (0.01 sec)
+
+--28.查询选修课编号为‘3-105’且成绩高于选修编号为‘3-245’课程的同学的cno、sno和degree
+select * from score 
+where cno='3-105' 
+and degree > all(select degree from score where cno='3-245');
+
+--29.查询所有教师和同学的name、sex和birthday。
+select sname as name,ssex as sex,sbirthday as birthday from student
+union
+select tname as name,tsex as sex,tbirthday as birthday from teacher
+
+mysql> select sname as name,ssex as sex,sbirthday as birthday from student
+    -> union
+    -> select tname as name,tsex as sex,tbirthday as birthday from teacher;
++-----------+-----+---------------------+
+| name      | sex | birthday            |
++-----------+-----+---------------------+
+| 曾华      | 男  | 1977-09-01 00:00:00 |
+| 匡明      | 男  | 1975-10-02 00:00:00 |
+| 王丽      | 女  | 1976-01-23 00:00:00 |
+| 李军      | 男  | 1976-02-20 00:00:00 |
+| 王芳      | 女  | 1975-02-10 00:00:00 |
+| 陆君      | 男  | 1974-06-03 00:00:00 |
+| 季军      | 男  | 1976-02-20 00:00:00 |
+| 王尼玛    | 男  | 1976-02-20 00:00:00 |
+| 张全蛋    | 男  | 1975-02-10 00:00:00 |
+| 李诚      | 男  | 1958-12-02 00:00:00 |
+| 王萍      | 女  | 1972-05-05 00:00:00 |
+| 刘冰      | 女  | 1977-08-14 00:00:00 |
+| 张旭      | 男  | 1969-03-12 00:00:00 |
++-----------+-----+---------------------+
+13 rows in set (0.01 sec)
+
+--30.查询所有‘女’教师和‘女’同学的name、sex和birthday。
+select sname as name,ssex as sex,sbirthday as birthday from student where ssex='女'
+union
+select tname as name,tsex as sex,tbirthday as birthday from teacher where tsex='女';
+
+mysql> select sname as name,ssex as sex,sbirthday as birthday from student where ssex='女'
+    -> union
+    -> select tname as name,tsex as sex,tbirthday as birthday from teacher where tsex='女';
++--------+-----+---------------------+
+| name   | sex | birthday            |
++--------+-----+---------------------+
+| 王丽   | 女  | 1976-01-23 00:00:00 |
+| 王芳   | 女  | 1975-02-10 00:00:00 |
+| 王萍   | 女  | 1972-05-05 00:00:00 |
+| 刘冰   | 女  | 1977-08-14 00:00:00 |
++--------+-----+---------------------+
+4 rows in set (0.00 sec)
+
+--31.查询成绩比该课程平均成绩低的同学的成绩表。
+select * from score a where degree < (select avg(degree) from score b where a.cno=b.cno);
+mysql> select * from score a where degree < (select avg(degree) from score b where a.cno=b.cno);
++-----+-------+--------+
+| sno | cno   | degree |
++-----+-------+--------+
+| 105 | 6-166 |     79 |
+| 109 | 3-105 |     76 |
+| 109 | 3-245 |     68 |
+| 109 | 6-166 |     81 |
++-----+-------+--------+
+4 rows in set (0.01 sec)
+
+--复制表数据做查询条件
+
+--32.查询所有任课教师的Tname和Depart.
+
+select tname, depart from teacher where tno in (select tno from course);
+mysql> select tname, depart from teacher where tno in (select tno from course);
++--------+--------------------+
+| tname  | depart             |
++--------+--------------------+
+| 李诚   | 计算机系           |
+| 王萍   | 计算机系           |
+| 刘冰   | 电子工程系系       |
+| 张旭   | 电子工程系         |
++--------+--------------------+
+4 rows in set (0.00 sec)
+
+--33.查询至少有两名男生的班号。
+select class from student where ssex='男' 
+group by class
+having count(*)>2;
+mysql> select class from student where ssex='男' 
+    -> group by class
+    -> having count(*)>2;
++-------+
+| class |
++-------+
+| 95033 |
+| 95031 |
++-------+
+2 rows in set (0.00 sec)
+
+--34、查询student表中不姓“王”的同学记录。
+select * from student where sname not like '王%';
+mysql> select * from student where sname not like '王%';
++-----+-----------+------+---------------------+-------+
+| sno | sname     | ssex | sbirthday           | class |
++-----+-----------+------+---------------------+-------+
+| 101 | 曾华      | 男   | 1977-09-01 00:00:00 | 95033 |
+| 102 | 匡明      | 男   | 1975-10-02 00:00:00 | 95031 |
+| 104 | 李军      | 男   | 1976-02-20 00:00:00 | 95033 |
+| 106 | 陆君      | 男   | 1974-06-03 00:00:00 | 95031 |
+| 107 | 季军      | 男   | 1976-02-20 00:00:00 | 95033 |
+| 109 | 张全蛋    | 男   | 1975-02-10 00:00:00 | 95031 |
++-----+-----------+------+---------------------+-------+
+--模糊查询 not like 。某个字符用'x%'表示。
+
+--35.查询student表中查询每个学生的姓名和年龄。
+--年龄=当前年份-出生年份
+select sname,(year(now())-year(sbirthday)) as '年领' from student;
+mysql> select sname,(year(now())-year(sbirthday)) as '年领' from student;
++-----------+--------+
+| sname     | 年领   |
++-----------+--------+
+| 曾华      |     42 |
+| 匡明      |     44 |
+| 王丽      |     43 |
+| 李军      |     43 |
+| 王芳      |     44 |
+| 陆君      |     45 |
+| 季军      |     43 |
+| 王尼玛    |     43 |
+| 张全蛋    |     44 |
++-----------+--------+
+9 rows in set (0.01 sec)
+
+--36.查询student表中最大和最小的sbirthday日期值
+select max(sbirthday) as '最大',min(sbirthday) as '最小' from student;
+mysql> select max(sbirthday) as '最大',min(sbirthday) as '最小' from student;
++---------------------+---------------------+
+| 最大                | 最小                |
++---------------------+---------------------+
+| 1977-09-01 00:00:00 | 1974-06-03 00:00:00 |
++---------------------+---------------------+
+1 row in set (0.00 sec)
+
+--37.以班号和年龄从大到小的顺序查询student表中的全部记录。
+select * from student
+order by class desc,sbirthday;
+mysql> select * from student
+    -> order by class desc,sbirthday;
++-----+-----------+------+---------------------+-------+
+| sno | sname     | ssex | sbirthday           | class |
++-----+-----------+------+---------------------+-------+
+| 103 | 王丽      | 女   | 1976-01-23 00:00:00 | 95033 |
+| 104 | 李军      | 男   | 1976-02-20 00:00:00 | 95033 |
+| 107 | 季军      | 男   | 1976-02-20 00:00:00 | 95033 |
+| 108 | 王尼玛    | 男   | 1976-02-20 00:00:00 | 95033 |
+| 101 | 曾华      | 男   | 1977-09-01 00:00:00 | 95033 |
+| 106 | 陆君      | 男   | 1974-06-03 00:00:00 | 95031 |
+| 105 | 王芳      | 女   | 1975-02-10 00:00:00 | 95031 |
+| 109 | 张全蛋    | 男   | 1975-02-10 00:00:00 | 95031 |
+| 102 | 匡明      | 男   | 1975-10-02 00:00:00 | 95031 |
++-----+-----------+------+---------------------+-------+
+9 rows in set (0.01 sec)
+
+--38.查询‘男’教师及其所上的课程。
+select * from course where tno in (select tno from teacher where tsex='男');
+
+mysql> select * from course where tno in (select tno from teacher where tsex='男');
++-------+--------------+-----+
+| cno   | cname        | tno |
++-------+--------------+-----+
+| 3-245 | 操作系统     | 804 |
+| 6-166 | 数字电路     | 856 |
++-------+--------------+-----+
+2 rows in set (0.00 sec)
+
+--39.查询最高分同学的sno、cno和degree列。
+select sno,cno,degree from score where degree=(select max(degree) from score);
+
+mysql> select sno,cno,degree from score where degree=(select max(degree) from score);
++-----+-------+--------+
+| sno | cno   | degree |
++-----+-------+--------+
+| 103 | 3-105 |     92 |
++-----+-------+--------+
+1 row in set (0.00 sec)
+
+select sno,cno,degree from score 
+order by degree desc
+LIMIT 1;--limit x即显示前	x 行。limit(a,b) 从a行开始显示b行
+mysql> select sno,cno,degree from score 
+    -> order by degree desc
+    -> LIMIT 1;
++-----+-------+--------+
+| sno | cno   | degree |
++-----+-------+--------+
+| 103 | 3-105 |     92 |
++-----+-------+--------+
+1 row in set (0.01 sec)
+
+--40.查询和‘李军’同性别的所有同学的sname
+select sname from student where ssex=(select ssex from student where sname='李军');
+
+--41.查询和‘李军’同性别并同班的同学sname。
+select sname from student where ssex=(select ssex from student where sname='李军') and class=(select class from student where sname='李军');
+
+mysql> select sname from student where ssex=(select ssex from student where sname='李军') and class=(select class from student where sname='李军');
++-----------+
+| sname     |
++-----------+
+| 曾华      |
+| 李军      |
+| 季军      |
+| 王尼玛    |
++-----------+
+4 rows in set (0.00 sec)
+
+--42.查询所有选修“计算机导论”课程的“男”同学的成绩表。
+select * from score where cno = (select cno from course where cname='计算机导论') and sno in (select sno from student where ssex='男');
+
+mysql> select * from score where cno = (select cno from course where cname='计算机导论') and sno in (select sno from student where ssex='男');
++-----+-------+--------+
+| sno | cno   | degree |
++-----+-------+--------+
+| 109 | 3-105 |     76 |
++-----+-------+--------+
+1 row in set (0.00 sec)
+
+--43.假设使用如下命令建立了一个grade表：
+create table grade(
+	low int(3),
+	upp int(3),
+	grade char(1)
+);
+
+insert into grade values('90','100','A');
+insert into grade values('80','90','B');
+insert into grade values('70','80','C');
+insert into grade values('60','70','D');
+insert into grade values('0','59','E');
+
+--现查询所有同学的sno、cno和grade列。
+
+select sno,cno,grade from score,grade where degree between low and upp;
+
+mysql> select sno,cno,grade from score,grade where degree between low and upp;
++-----+-------+-------+
+| sno | cno   | grade |
++-----+-------+-------+
+| 103 | 3-105 | A     |
+| 103 | 6-166 | B     |
+| 105 | 3-105 | B     |
+| 105 | 3-245 | C     |
+| 105 | 6-166 | C     |
+| 109 | 3-105 | C     |
+| 109 | 3-245 | D     |
+| 109 | 6-166 | B     |
++-----+-------+-------+
+8 rows in set (0.01 sec)
+
+--SQL的四种连接查询
+--内连接
+--inner join 或 join
+
+--外连接
+--1.左连接 left join 或者 left outer join
+--2.右连接 right join 或者 right outer join
+--3.完全外连接 full join 或者 full outer join
+create database testjoin;
+--创建两个表：
+--person 表
+--id,
+--name,
+--cardId
+
+create table person(
+id int(10),
+name varchar(10),
+cardId int(10)
+);
+insert into person values('1','张三','1');
+insert into person values('2','李四','3');
+insert into person values('3','王五','6');
+
+--card表
+--id,
+--name
+create table card(
+	id int,
+	name varchar(20)
+);
+insert into card values('1','饭卡');
+insert into card values('2','建行卡');
+insert into card values('3','农行卡');
+insert into card values('4','工商卡');
+insert into card values('5','邮政卡');
+
+--1.内联查询，其实就是两张表中的数据，通过某个字段相对，查询出相关记录数据。
+select * from person join card on person.cardId=card.id;
+
+mysql> select * from person join card on person.cardId=card.id;
++------+--------+--------+------+-----------+
+| id   | name   | cardId | id   | name      |
++------+--------+--------+------+-----------+
+|    1 | 张三   |      1 |    1 | 饭卡      |
+|    2 | 李四   |      3 |    3 | 农行卡    |
++------+--------+--------+------+-----------+
+2 rows in set (0.00 sec)
+
+
+--2.left join(左外连接)
+select * from person left join card on person.cardId=card.id;
+mysql> select * from person left join card on person.cardId=card.id;
++------+--------+--------+------+-----------+
+| id   | name   | cardId | id   | name      |
++------+--------+--------+------+-----------+
+|    1 | 张三   |      1 |    1 | 饭卡      |
+|    2 | 李四   |      3 |    3 | 农行卡    |
+|    3 | 王五   |      6 | NULL | NULL      |
++------+--------+--------+------+-----------+
+
+--3.right join(右外连接)
+select * from person  right join card on person.cardId=card.id;
+
+mysql> select * from person  right join card on person.cardId=card.id;
++------+--------+--------+------+-----------+
+| id   | name   | cardId | id   | name      |
++------+--------+--------+------+-----------+
+|    1 | 张三   |      1 |    1 | 饭卡      |
+|    2 | 李四   |      3 |    3 | 农行卡    |
+| NULL | NULL   |   NULL |    2 | 建行卡    |
+| NULL | NULL   |   NULL |    4 | 工商卡    |
+| NULL | NULL   |   NULL |    5 | 邮政卡    |
++------+--------+--------+------+-----------+
+5 rows in set (0.00 sec)
+
+--4.full join(全外连接)
+select * from person  full join card on person.cardId=card.id;
+mysql> select * from person  full join card on person.cardId=card.id;
+ERROR 1054 (42S22): Unknown column 'person.cardId' in 'on clause'
+--mysql不支持full join
+--union来实现
+select * from person left join card on person.cardId=card.id
+union
+select * from person  right join card on person.cardId=card.id;
+
+mysql> select * from person left join card on person.cardId=card.id
+    -> union
+    -> select * from person  right join card on person.cardId=card.id;
++------+--------+--------+------+-----------+
+| id   | name   | cardId | id   | name      |
++------+--------+--------+------+-----------+
+|    1 | 张三   |      1 |    1 | 饭卡      |
+|    2 | 李四   |      3 |    3 | 农行卡    |
+|    3 | 王五   |      6 | NULL | NULL      |
+| NULL | NULL   |   NULL |    2 | 建行卡    |
+| NULL | NULL   |   NULL |    4 | 工商卡    |
+| NULL | NULL   |   NULL |    5 | 邮政卡    |
++------+--------+--------+------+-----------+
+6 rows in set (0.00 sec)
