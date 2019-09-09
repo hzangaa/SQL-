@@ -1,0 +1,149 @@
+--mysql 
+--关系型数据库
+--MAC如何使用终端操作数据库
+
+--1.如何登陆数据库服务器？
+/usr/local/mysql/bin/mysql -u root -p
+
+--2.如何查询数据库服务器中所有的数据库？
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+
+--3.如何选中某一个数据库进行操作？
+mysql> use mysql
+
+--4.如何退出数据库服务器？
+mysql> exit;
+Bye
+HONGZANG-MB0:bin zanghong$ 
+
+--5.如何在数据库服务器中创建数据库？
+mysql> create database rest;
+Query OK, 1 row affected (0.00 sec)
+
+4 rows in set (0.02 sec)
+
+--6.如何查看某个数据库中的所有数据表？
+mysql> use test;
+Database changed
+mysql> show tables;
+Empty set (0.00 sec)
+
+--7.如何创建一个数据表？
+mysql> create TABLE pet (
+    -> name VARCHAR(20),
+    -> owner VARCHAR(20),
+    -> species VARCHAR(20),
+    -> sex CHAR(1),
+    -> birth DATE,
+    -> death DATE);
+Query OK, 0 rows affected (0.02 sec)
+
+--8.查看数据表是否创建成功
+mysql> show tables;
++----------------+
+| Tables_in_test |
++----------------+
+| pet            |
++----------------+
+1 row in set (0.00 sec)
+
+--9.查看创建好的数据表的结构
+mysql> describe pet;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| name    | varchar(20) | YES  |     | NULL    |       |
+| owner   | varchar(20) | YES  |     | NULL    |       |
+| species | varchar(20) | YES  |     | NULL    |       |
+| sex     | char(1)     | YES  |     | NULL    |       |
+| birth   | date        | YES  |     | NULL    |       |
+| death   | date        | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+--10.如何查看数据表中的记录？
+mysql> select * from pet;
+Empty set (0.00 sec)
+
+--11.如何在数据表中添加数据记录呢？
+mysql> INSERT INTO pet
+    -> VALUES('Puffball','Diane','hamster','f','1999-03-30',NULL);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * from pet;
++----------+-------+---------+------+------------+-------+
+| name     | owner | species | sex  | birth      | death |
++----------+-------+---------+------+------------+-------+
+| Puffball | Diane | hamster | f    | 1999-03-30 | NULL  |
++----------+-------+---------+------+------------+-------+
+1 row in set (0.00 sec)
+
+--12.mysql常用类型有哪些
+
+--MySQL支持多种类型，大致可以分为三类：
+--数值（选择看大小）
+create table testType(
+	number TINYINT
+);
+
+mysql> describe testType;
++--------+------------+------+-----+---------+-------+
+| Field  | Type       | Null | Key | Default | Extra |
++--------+------------+------+-----+---------+-------+
+| number | tinyint(4) | YES  |     | NULL    |       |
++--------+------------+------+-----+---------+-------+
+1 row in set (0.00 sec)
+insert into testType value(128);
+ERROR 1264 (22003): Out of range value for column 'number' at row 1
+
+--日期/时间（选择看格式）
+
+--字符串（选择看大小）。
+--https://www.runoob.com/mysql/mysql-data-types.html
+
+--13.如何使用删减
+INSERT INTO pet VALUES('mm','ella','hamster','f','1999-03-30',NULL);
+INSERT INTO pet VALUES('dd','sunny','sheep','m','1993-03-30',NULL);
+INSERT INTO pet VALUES('tt','holly','cat','f','1996-03-30',NULL);
+INSERT INTO pet VALUES('pp','may','hamster','m','1999-03-30',NULL);
+INSERT INTO pet VALUES('zz','may','dog','m','1998-03-30',NULL);
+INSERT INTO pet VALUES('Puffball','Diane','hamster','f','2000-03-30',NULL);
+mysql> select * from pet;
++----------+-----------+---------+------+------------+-------+
+| name     | owner     | species | sex  | birth      | death |
++----------+-----------+---------+------+------------+-------+
+| Puffball | Diane     | hamster | f    | 1999-03-30 | NULL  |
+| 旺财     | 周星驰    | 狗      | 男   | 1990-01-01 | NULL  |
+| mm       | ella      | hamster | f    | 1999-03-30 | NULL  |
+| dd       | sunny     | sheep   | m    | 1993-03-30 | NULL  |
+| tt       | holly     | cat     | f    | 1996-03-30 | NULL  |
+| pp       | may       | hamster | m    | 1999-03-30 | NULL  |
+| zz       | may       | dog     | m    | 1998-03-30 | NULL  |
+| Puffball | Diane     | hamster | f    | 2000-03-30 | NULL  |
++----------+-----------+---------+------+------------+-------+
+8 rows in set (0.00 sec)
+delete from pet where name='Puffball';
+
+--如何修改数据？
+update pet set name='旺旺财' where owner='周星驰';
+--如何使用可视化工具操作数据库
+
+--总结一下：数据记录常见操作
+--增加 
+INSERT
+--删除
+delete
+--修改
+update
+--查询
+select
+
+--
